@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { MOVIES } from './moviesData';
 
 function Home({ onMovieSelect }) {
     const [movies, setMovies] = useState([]);
@@ -15,13 +16,15 @@ function Home({ onMovieSelect }) {
 
     const fetchMovies = async () => {
         try {
+            // Try fetching from Backend
             const res = await fetch(`${API_BASE}/movies`);
+            if (!res.ok) throw new Error('API Error');
             const data = await res.json();
-            // Sort movies by ID to keep consistent order if needed, or rely on backend
-            // For now just set data
             setMovies(data);
         } catch (error) {
-            console.error("Error fetching movies:", error);
+            console.warn("Backend invalid, switching to Standalone Mode (Movies)");
+            // Fallback to Static Data
+            setMovies(MOVIES);
         } finally {
             setLoading(false);
         }
@@ -29,35 +32,52 @@ function Home({ onMovieSelect }) {
 
     const fetchWishlist = async () => {
         try {
+            // Try fetching from Backend
             const res = await fetch(`${API_BASE}/wishlist`);
+            if (!res.ok) throw new Error('API Error');
             const data = await res.json();
             setWishlist(data);
         } catch (error) {
-            console.error("Error fetching wishlist:", error);
+            console.warn("Backend invalid, switching to Standalone Mode (Wishlist/LocalStore)");
+            // Fallback to LocalStorage
+            const savedWishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            setWishlist(savedWishlist);
         }
     };
 
     const addToWishlist = async (movieId) => {
         try {
+            // Try Backend
             const res = await fetch(`${API_BASE}/wishlist`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ movieId }),
             });
+            if (!res.ok) throw new Error('API Error');
             const data = await res.json();
             if (data.success) setWishlist(data.wishlist);
         } catch (error) {
-            console.error("Error adding to wishlist:", error);
+            // Fallback Local
+            console.warn("Using Local Wishlist (Add)");
+            const newWishlist = [...wishlist, movieId];
+            setWishlist(newWishlist);
+            localStorage.setItem('wishlist', JSON.stringify(newWishlist));
         }
     };
 
     const removeFromWishlist = async (movieId) => {
         try {
+            // Try Backend
             const res = await fetch(`${API_BASE}/wishlist/${movieId}`, { method: 'DELETE' });
+            if (!res.ok) throw new Error('API Error');
             const data = await res.json();
             if (data.success) setWishlist(data.wishlist);
         } catch (error) {
-            console.error("Error removing from wishlist:", error);
+            // Fallback Local
+            console.warn("Using Local Wishlist (Remove)");
+            const newWishlist = wishlist.filter(id => id !== movieId);
+            setWishlist(newWishlist);
+            localStorage.setItem('wishlist', JSON.stringify(newWishlist));
         }
     };
 

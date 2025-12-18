@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { MOVIES } from './moviesData';
 
 function MovieDetail({ movieId, onBack }) {
     const [movie, setMovie] = useState(null);
@@ -17,11 +18,13 @@ function MovieDetail({ movieId, onBack }) {
         try {
             setLoading(true);
             const res = await fetch(`${API_BASE}/movies/${movieId}`);
-            if (!res.ok) throw new Error('Movie not found');
+            if (!res.ok) throw new Error('API Error');
             const data = await res.json();
             setMovie(data);
         } catch (error) {
-            console.error("Error fetching movie:", error);
+            console.warn("Backend invalid, finding movie locally");
+            const foundMovie = MOVIES.find(m => m.id === movieId);
+            setMovie(foundMovie);
         } finally {
             setLoading(false);
         }
