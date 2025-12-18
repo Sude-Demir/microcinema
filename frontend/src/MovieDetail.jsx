@@ -1,31 +1,21 @@
 import { useState, useEffect } from 'react';
+import { MOVIES } from './moviesData';
 
 function MovieDetail({ movieId, onBack }) {
     const [movie, setMovie] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Use the same API_BASE logic
-    const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000/api';
-
     useEffect(() => {
         if (movieId) {
-            fetchMovie();
+            setLoading(true);
+            // Simulate network delay
+            setTimeout(() => {
+                const foundMovie = MOVIES.find(m => m.id === movieId);
+                setMovie(foundMovie);
+                setLoading(false);
+            }, 300);
         }
     }, [movieId]);
-
-    const fetchMovie = async () => {
-        try {
-            setLoading(true);
-            const res = await fetch(`${API_BASE}/movies/${movieId}`);
-            if (!res.ok) throw new Error('Movie not found');
-            const data = await res.json();
-            setMovie(data);
-        } catch (error) {
-            console.error("Error fetching movie:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     if (loading) return <div className="text-center py-20 text-orange-400">Loading details...</div>;
     if (!movie) return <div className="text-center py-20 text-red-500">Movie not found.</div>;

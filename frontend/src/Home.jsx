@@ -1,62 +1,31 @@
 import { useState, useEffect } from 'react';
+import { MOVIES } from './moviesData';
 
 function Home({ onMovieSelect }) {
     const [movies, setMovies] = useState([]);
     const [wishlist, setWishlist] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Gateway URL
-    const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000/api';
-
     useEffect(() => {
-        fetchMovies();
-        fetchWishlist();
+        // Simulate loading
+        setTimeout(() => {
+            setMovies(MOVIES);
+            const savedWishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            setWishlist(savedWishlist);
+            setLoading(false);
+        }, 500);
     }, []);
 
-    const fetchMovies = async () => {
-        try {
-            const res = await fetch(`${API_BASE}/movies`);
-            const data = await res.json();
-            setMovies(data);
-        } catch (error) {
-            console.error("Error fetching movies:", error);
-        } finally {
-            setLoading(false);
-        }
+    const addToWishlist = (movieId) => {
+        const newWishlist = [...wishlist, movieId];
+        setWishlist(newWishlist);
+        localStorage.setItem('wishlist', JSON.stringify(newWishlist));
     };
 
-    const fetchWishlist = async () => {
-        try {
-            const res = await fetch(`${API_BASE}/wishlist`);
-            const data = await res.json();
-            setWishlist(data);
-        } catch (error) {
-            console.error("Error fetching wishlist:", error);
-        }
-    };
-
-    const addToWishlist = async (movieId) => {
-        try {
-            const res = await fetch(`${API_BASE}/wishlist`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ movieId }),
-            });
-            const data = await res.json();
-            if (data.success) setWishlist(data.wishlist);
-        } catch (error) {
-            console.error("Error adding to wishlist:", error);
-        }
-    };
-
-    const removeFromWishlist = async (movieId) => {
-        try {
-            const res = await fetch(`${API_BASE}/wishlist/${movieId}`, { method: 'DELETE' });
-            const data = await res.json();
-            if (data.success) setWishlist(data.wishlist);
-        } catch (error) {
-            console.error("Error removing from wishlist:", error);
-        }
+    const removeFromWishlist = (movieId) => {
+        const newWishlist = wishlist.filter(id => id !== movieId);
+        setWishlist(newWishlist);
+        localStorage.setItem('wishlist', JSON.stringify(newWishlist));
     };
 
     const isInWishlist = (id) => wishlist.includes(id);
