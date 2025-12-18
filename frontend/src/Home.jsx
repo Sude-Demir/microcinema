@@ -1,31 +1,64 @@
 import { useState, useEffect } from 'react';
-import { MOVIES } from './moviesData';
 
 function Home({ onMovieSelect }) {
     const [movies, setMovies] = useState([]);
     const [wishlist, setWishlist] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Gateway URL
+    const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000/api';
+
     useEffect(() => {
-        // Simulate loading
-        setTimeout(() => {
-            setMovies(MOVIES);
-            const savedWishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-            setWishlist(savedWishlist);
-            setLoading(false);
-        }, 500);
+        fetchMovies();
+        fetchWishlist();
     }, []);
 
-    const addToWishlist = (movieId) => {
-        const newWishlist = [...wishlist, movieId];
-        setWishlist(newWishlist);
-        localStorage.setItem('wishlist', JSON.stringify(newWishlist));
+    const fetchMovies = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/movies`);
+            const data = await res.json();
+            // Sort movies by ID to keep consistent order if needed, or rely on backend
+            // For now just set data
+            setMovies(data);
+        } catch (error) {
+            console.error("Error fetching movies:", error);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const removeFromWishlist = (movieId) => {
-        const newWishlist = wishlist.filter(id => id !== movieId);
-        setWishlist(newWishlist);
-        localStorage.setItem('wishlist', JSON.stringify(newWishlist));
+    const fetchWishlist = async () => {
+        try {
+            const res = await fetch(`${API_BASE}/wishlist`);
+            const data = await res.json();
+            setWishlist(data);
+        } catch (error) {
+            console.error("Error fetching wishlist:", error);
+        }
+    };
+
+    const addToWishlist = async (movieId) => {
+        try {
+            const res = await fetch(`${API_BASE}/wishlist`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ movieId }),
+            });
+            const data = await res.json();
+            if (data.success) setWishlist(data.wishlist);
+        } catch (error) {
+            console.error("Error adding to wishlist:", error);
+        }
+    };
+
+    const removeFromWishlist = async (movieId) => {
+        try {
+            const res = await fetch(`${API_BASE}/wishlist/${movieId}`, { method: 'DELETE' });
+            const data = await res.json();
+            if (data.success) setWishlist(data.wishlist);
+        } catch (error) {
+            console.error("Error removing from wishlist:", error);
+        }
     };
 
     const isInWishlist = (id) => wishlist.includes(id);
@@ -142,14 +175,6 @@ function Home({ onMovieSelect }) {
                                     })}
                                 </ul>
                             )}
-                            <div className="mt-8 pt-6 border-t border-orange-100">
-                                <div className="text-xs text-orange-900/50">
-                                    <span className="block font-semibold mb-1 text-orange-900/70">Microservice Status:</span>
-                                    <div className="flex items-center gap-2 mb-1"><div className="w-2 h-2 rounded-full bg-green-500"></div>Gateway (3000)</div>
-                                    <div className="flex items-center gap-2 mb-1"><div className="w-2 h-2 rounded-full bg-green-500"></div>Movie (3001)</div>
-                                    <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-green-500"></div>Wishlist (3002)</div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
