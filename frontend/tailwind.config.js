@@ -7,10 +7,10 @@ export default {
     theme: {
         extend: {
             colors: {
-                primary: '#6366f1', // Indigo 500
-                secondary: '#a855f7', // Purple 500
-                dark: '#0f172a', // Slate 900
-                card: '#1e293b', // Slate 800
+                primary: '#f97316', // Orange 500
+                secondary: '#f59e0b', // Amber 500
+                dark: '#fff7ed', // Orange 50 (Warm cream/soft orange base)
+                card: '#ffffff', // White
             }
         },
     },

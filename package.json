@@ -1,0 +1,15 @@
+{
+    "name": "microcinema-root",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "start": "concurrently \"npm run gateway\" \"npm run movie\" \"npm run wishlist\" \"npm run frontend\"",
+        "gateway": "cd gateway && node index.js",
+        "movie": "cd movie-service && node index.js",
+        "wishlist": "cd wishlist-service && node index.js",
+        "frontend": "cd frontend && npm run dev"
+    },
+    "devDependencies": {
+        "concurrently": "^9.1.0"
+    }
+}

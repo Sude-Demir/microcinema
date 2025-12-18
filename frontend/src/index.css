@@ -3,8 +3,11 @@
 @tailwind utilities;
 
 body {
-  background-color: #0f172a;
-  color: #f8fafc;
+  /* Soft Sunset Gradient: Cream -> Peach -> Soft Orange */
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 50%, #fed7aa 100%);
+  background-attachment: fixed;
+  color: #431407;
+  /* Orange 950 - Dark Warm Brown Text for better contrast */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   overflow-x: hidden;
 }
