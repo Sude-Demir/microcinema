@@ -4,6 +4,11 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
 app.use(cors());
+app.use((req, res, next) => {
+    console.log(req.method, req.url);
+    next();
+});
+
 
 // Helper to strip downstream CORS headers to avoid "Duplicate Headers" errors
 const onProxyRes = (proxyRes) => {
@@ -11,6 +16,10 @@ const onProxyRes = (proxyRes) => {
     delete proxyRes.headers['access-control-allow-methods'];
     delete proxyRes.headers['access-control-allow-headers'];
 };
+app.get("/", (req, res) => {
+    console.log("ROOT endpoint hit");
+    res.status(200).send("Gateway is running");
+});
 
 // Proxy to Movie Service
 app.use('/api/movies', createProxyMiddleware({
