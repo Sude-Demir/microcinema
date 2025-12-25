@@ -1,7 +1,7 @@
 🎬 Microcinema
 Mikroservis mimarisini öğrenmek ve uygulamak amacıyla geliştirdiğim, temel film ve abonelik işlemlerini içeren bir web projesi.
 
-🔗 [Canlı Demo Linki Buraya]
+🔗 [(https://microcinema.vercel.app/)]
 
 ✨ Özellikler
 Mikroservis Yapısı: Farklı işlevlerin (Film, Kullanıcı vb.) bağımsız servisler olarak çalışması.
