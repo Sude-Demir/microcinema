@@ -1,20 +1,24 @@
-🎬 Microcinema
-Mikroservis mimarisini öğrenmek ve uygulamak amacıyla geliştirdiğim, temel film ve abonelik işlemlerini içeren bir web projesi.
+🎬 MicroCinema
 
-🔗 [(https://microcinema.vercel.app/)]
+MicroCinema, mikroservis mimarisini öğrenmek amacıyla geliştirilmiş basit bir film web uygulamasıdır.
 
-✨ Özellikler
+🌐 Canlı Demo:
+https://microcinema.vercel.app/
 
-Mikroservis Yapısı: Farklı işlevlerin (Film, Kullanıcı vb.) bağımsız servisler olarak çalışması.
+🚀 Özellikler
 
-Hızlı Erişim: Kullanıcı dostu arayüz ile film listeleme ve detay görme.
+🎥 Film listeleme
 
-Docker Desteği: Tek komutla tüm projeyi ayağa kaldırma imkanı.
+📄 Film detaylarını görüntüleme
 
-🛠 Teknolojiler
+🧩 Mikroservis mimari yapısı
 
-.NET & C# (Backend)
+🐳 Docker ile container desteği
 
-Docker (Containerization)
+🛠️ Kullanılan Teknolojiler
 
-RabbitMQ (Servisler arası iletişim)
+.NET & C#
+
+Docker
+
+Mikroservis mimarisi
