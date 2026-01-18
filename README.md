@@ -2,8 +2,7 @@
 
 MicroCinema, mikroservis mimarisini öğrenmek amacıyla geliştirilmiş basit bir film web uygulamasıdır.
 
-🌐 Canlı Demo:
-https://microcinema.vercel.app/
+
 
 🚀 Özellikler
 
